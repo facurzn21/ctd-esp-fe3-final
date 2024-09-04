@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['dh-frontend.cdn.prismic.io'],
+      domains: ["dh-frontend.cdn.prismic.io", "i.annihil.us"],
     },
     reactStrictMode: true,
     swcMinify: true,
@@ -12,7 +12,8 @@ const nextConfig = {
     // means the following files: _document.tsx, _app.tsx, middleware.ts, pages/users.tsx and pages/api/users.ts
     // will have to be renamed to _document.page.tsx, _app.page.tsx, middleware.route.ts, pages/users.page.tsx
     // and pages/api/users.page.ts respectively.
-    pageExtensions: ['page.tsx', 'page.ts', 'route.tsx', 'route.ts']
-}
-
-module.exports = nextConfig
+    pageExtensions: ["page.tsx", "page.ts", "route.tsx", "route.ts"],
+  };
+  
+  module.exports = nextConfig;
+  
