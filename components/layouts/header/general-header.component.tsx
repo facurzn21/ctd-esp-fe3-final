@@ -9,8 +9,8 @@ import { Link as MUILink } from "@mui/material";
 
 type Props = {
   variant?: "simple" | "general";
-  children?: React.ReactNode;
 };
+
 const Header: FC<Props> = ({ variant }: Props) => {
   return (
     <Container maxWidth="xl">
@@ -26,13 +26,12 @@ const Header: FC<Props> = ({ variant }: Props) => {
               textDecoration: "none",
             }}
           >
-            {" "}
             DH-Marvel
           </MUILink>
         </NextLink>
         {variant == "general" && (
           <Box>
-            <NextLink href="/preguntas-frecuentes" passHref>
+            <NextLink href="/faqs" passHref>
               <MUILink
                 variant="body2"
                 sx={{ color: "white", fontSize: 18, fontWeight: 600 }}
@@ -49,7 +48,12 @@ const Header: FC<Props> = ({ variant }: Props) => {
 
 const GeneralHeader: FC<Props> = ({ variant }: Props) => {
   return variant == "general" ? (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: "#000",
+      }}
+    >
       <Header variant={variant} />
     </AppBar>
   ) : (

@@ -1,3 +1,4 @@
+/*
 import Faqs from "dh-marvel/components/faqs/Faqs";
 import { FaqsType, faqsData } from "dh-marvel/components/faqs/faqsData";
 
@@ -18,3 +19,4 @@ export async function getStaticProps() {
 }
 
 export default Index;
+*/

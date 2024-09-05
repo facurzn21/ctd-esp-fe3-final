@@ -1,109 +1,80 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import BodySingle from "dh-marvel/components/layouts/body/single/body-single";
-import { useState } from "react";
-import { Box, Button } from "@mui/material";
-import GrillaComics from "dh-marvel/components/home/GrillaComics";
+import { Stack } from "@mui/material";
+import PaginationComponent from "dh-marvel/components/pagination/pagination.component";
+import { useEffect, useState } from "react";
+import { IComicResponse } from "types/IComic.type";
+import { getComicsByPage } from "dh-marvel/services/comic/comic.service";
+import { useRouter } from "next/router";
+import { getComics } from "dh-marvel/services/marvel/marvel.service";
+import GridLayout from "dh-marvel/components/grid-layout/grid-layoout.component";
 
-export interface IndexProps {
-  data: {
-    offset: number;
-    limit: number;
-    total: number;
-    count: number;
-    results: Comics[];
-  };
+interface Props {
+  comics: IComicResponse;
 }
 
-export type Comics = {
-  id: number;
-  title: string;
-  thumbnail: {
-    path: string;
-    extension: string;
-  };
-};
+const QTY_OF_CARDS = 12;
 
-const Index: NextPage<IndexProps> = ({ data }) => {
-  const [offset, setOffset] = useState(0);
-  const [comicList, setComicList] = useState(data);
+const Index: NextPage<Props> = ({ comics }) => {
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState<number | null>(null);
+  const [comicsData, setComicsData] = useState<IComicResponse>();
 
-  const handlePrevClick = async () => {
-    const newOffset = Math.max(0, offset - data.limit);
-    setOffset(newOffset);
-    const newData = await fetchNewData(newOffset);
-    setComicList(newData);
-  };
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
-  const handleNextClick = async () => {
-    const newOffset = offset + data.limit;
-    setOffset(newOffset);
-    const newData = await fetchNewData(newOffset);
-    setComicList(newData);
-  };
+  useEffect(() => {
+    if (currentPage !== null) {
+      router.push(`/?page=${currentPage}`, undefined, { shallow: true });
 
-  const fetchNewData = async (newOffset: number) => {
-    const res = await fetch(
-      `https://gateway.marvel.com/v1/public/comics?ts=1000&apikey=9c13f09d734436992a5f806b1b485adf&hash=01f538a62c398bbe3eeeaf75172af46d&limit=12&offset=${newOffset}`
-    );
-    const newData = await res.json();
-    return newData.data;
-  };
+      getComicsByPage(QTY_OF_CARDS, currentPage).then(
+        (data: IComicResponse) => {
+          if (data.code === 200) {
+            setComicsData(data);
+          }
+        }
+      );
+    }
+  }, [currentPage]);
+
+  const pagesQty: number =
+    comics?.data?.total !== undefined ? Math.ceil(comics.data.total / 12) : 1;
 
   return (
     <>
       <Head>
-        <title>Marvel App</title>
-        <meta name="description" content="A list of Marvel Comics for sale" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>DH MARVEL</title>
+        <meta name="description" content="Sitio DH MARVEL" />
       </Head>
-
-      <BodySingle title={"Comics"}>
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Box
-            sx={{
-              width: "85%",
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "20px",
-            }}
-          >
-            <Button
-              onClick={handlePrevClick}
-              size="medium"
-              variant="contained"
-              disabled={offset === 0}
-            >
-              Prev
-            </Button>
-            <Button
-              disabled={offset + data.limit >= data.total}
-              onClick={handleNextClick}
-              size="medium"
-              variant="contained"
-            >
-              Next
-            </Button>
-          </Box>
-        </Box>
-
-        <GrillaComics data={comicList} />
-      </BodySingle>
+      <Stack
+        component="section"
+        maxWidth="xl"
+        direction="column"
+        spacing={10}
+        alignItems="center"
+        paddingY={15}
+        paddingX={{ xs: 3, sm: 4, md: 4 }}
+      >
+        <GridLayout
+          comics={
+            comicsData === undefined
+              ? comics.data?.results
+              : comicsData.data?.results
+          }
+        />
+        <PaginationComponent
+          pagesQty={pagesQty}
+          setCurrentPage={setCurrentPage}
+        />
+      </Stack>
     </>
   );
 };
 
-export const getServerSideProps = async () => {
-  const res = await fetch(
-    `http://gateway.marvel.com/v1/public/comics?ts=1000&apikey=9c13f09d734436992a5f806b1b485adf&hash=01f538a62c398bbe3eeeaf75172af46d&limit=12`
-  );
-  const data = await res.json();
-
-  return {
-    props: {
-      data: data.data,
-    },
-  };
-};
+export async function getServerSideProps() {
+  const comics = await getComics(0, QTY_OF_CARDS);
+  return { props: { comics } };
+}
 
 export default Index;
