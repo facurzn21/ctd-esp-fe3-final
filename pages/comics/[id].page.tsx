@@ -25,7 +25,7 @@ const Comic: NextPage<Props> = ({ comic }) => {
   return (
     <>
       <Head>
-        <title>DH-MARVEL</title>
+        <title>Marvel App</title>
         <meta
           name="description"
           content={`Comic de Marvel.${comic.title}.${comic.series}`}

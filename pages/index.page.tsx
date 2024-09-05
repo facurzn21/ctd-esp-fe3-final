@@ -36,7 +36,7 @@ const Index: NextPage<Props> = ({ comics }) => {
         }
       );
     }
-  }, [currentPage]);
+  }, [currentPage, router]);
 
   const pagesQty: number =
     comics?.data?.total !== undefined ? Math.ceil(comics.data.total / 12) : 1;
@@ -44,7 +44,7 @@ const Index: NextPage<Props> = ({ comics }) => {
   return (
     <>
       <Head>
-        <title>DH MARVEL</title>
+        <title>Marvel App</title>
         <meta name="description" content="Sitio DH MARVEL" />
       </Head>
       <Stack

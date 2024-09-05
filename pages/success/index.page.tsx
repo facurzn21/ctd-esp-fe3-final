@@ -20,7 +20,7 @@ const SuccesCheckout: NextPage = () => {
     } else {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   if (!dataCheckout) {
     return <Loader />;
