@@ -6,6 +6,7 @@ import ControlledTextInput from "dh-marvel/components/controlled-text-input/Cont
 import { personalDataSchema } from "./schema";
 import StepperNavigation from "../stepper-navigation.component";
 import { ICustomer } from "types/ICheckout.type";
+import { PersonalData } from "types/PersonalData.type";
 
 export type CustomerDataProps = {
   data: ICustomer;
@@ -18,18 +19,26 @@ const CustomerDataForm: FC<CustomerDataProps> = ({
   activeStep,
   handleNext,
 }: CustomerDataProps) => {
-  const methods = useForm<ICustomer>({
+  const methods = useForm<PersonalData>({
     resolver: yupResolver(personalDataSchema),
-    defaultValues: { ...data },
+    defaultValues: {
+      name: data.name,
+      lastname: data.lastname,
+      email: data.email,
+    },
   });
   const { setFocus, handleSubmit } = methods;
 
-  const onSubmit = (data: ICustomer) => {
-    handleNext(data);
+  const onSubmit = (formData: PersonalData) => {
+    handleNext({
+      ...data,
+      ...formData,
+    });
   };
+
   useEffect(() => {
     setFocus("name");
-  }, []);
+  }, [setFocus]);
 
   return (
     <Stack>

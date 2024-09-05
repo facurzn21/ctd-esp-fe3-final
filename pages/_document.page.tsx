@@ -5,7 +5,7 @@ export default function Document() {
     <Html style={{ height: "100%" }}>
       <Head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono"
+          href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=optional"
           rel="stylesheet"
         />
         <link rel="icon" href="/marvel.png" />
