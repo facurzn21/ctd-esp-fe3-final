@@ -51,7 +51,7 @@ const PaymentForm: FC<PaymentFormProps> = ({
 
   useEffect(() => {
     setFocus("number");
-  }, []);
+  }, [setFocus]);
 
   const onSubmit = (data: ICard) => {
     handleNext(data);
