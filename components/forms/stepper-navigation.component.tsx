@@ -31,7 +31,7 @@ const StepperNavigation: FC<StepperNavigationProps> = ({
           <Button
             onClick={handleNext}
             sx={{ mr: 1 }}
-            variant="nextStepBuy"
+            variant="text"
             endIcon={<ChevronRightIcon />}
           >
             SIGUIENTE
