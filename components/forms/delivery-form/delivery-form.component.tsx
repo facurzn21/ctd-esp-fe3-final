@@ -26,14 +26,16 @@ const DeliveryForm: FC<DeliveryFormProps> = ({
       ...data,
     },
   });
+
   const { setFocus, handleSubmit } = methods;
 
-  const onSubmit = (data: IAddress) => {
-    handleNext(data);
+  const onSubmit = (formData: IAddress) => {
+    handleNext(formData);
   };
+
   useEffect(() => {
     setFocus("address1");
-  }, []);
+  }, [setFocus]);
 
   return (
     <Stack>

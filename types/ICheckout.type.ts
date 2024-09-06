@@ -19,7 +19,7 @@ export interface IOrder {
 
 export interface IAddress {
   address1: string;
-  address2: string | null;
+  address2?: string | null;
   city: string;
   state: string;
   zipCode: string;
