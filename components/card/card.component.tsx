@@ -48,9 +48,9 @@ const CardComponent: FC<Props> = ({ comic }) => {
       </Box>
       <CardActions>
         <NextLink href={`/comics/${comic.id}`}>
-          <Button variant="seeMore">Ver detalles</Button>
+          <Button variant="text">Ver detalles</Button>
         </NextLink>
-        <Button variant="buyCard" onClick={() => handleBuy(comic.id)}>
+        <Button variant="contained" onClick={() => handleBuy(comic.id)}>
           COMPRAR
         </Button>
       </CardActions>
