@@ -6,6 +6,7 @@ const MARVEL_API_URL = process.env.MARVEL_API_URL;
 const fetchApi = async (endpoint: string, urlParams?: string) => {
   const authString = generateAuthenticationString();
   const url = `${MARVEL_API_URL}/${endpoint}?${authString}&${urlParams || ""}`;
+  console.log(url);
 
   const headers = {
     "Content-Type": "application/json",
