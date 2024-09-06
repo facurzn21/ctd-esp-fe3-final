@@ -29,7 +29,7 @@ const AccordionComic: FC<Props> = ({ comic }) => {
                   href={`/characters/${getIdfromURI(character.resourceURI)}`}
                   key={character.name}
                 >
-                  <Button fullWidth variant="text" size="small">
+                  <Button fullWidth variant="link" size="small">
                     {character.name}
                   </Button>
                 </NextLink>
