@@ -69,7 +69,7 @@ const StepperForm: FC<StepperForm> = ({ comic }) => {
           },
         });
     }
-  }, [comic]);
+  }, [checkoutData, comic]);
 
   const handleSubmitCustomerForm = (data: ICustomer) => {
     setCheckoutData({
