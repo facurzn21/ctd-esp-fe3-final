@@ -144,16 +144,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const data: ICharacterResponse = await getCharacters();
+  try {
+    const data: ICharacterResponse = await getCharacters();
 
-  const paths = data.data.results.map((character) => {
-    return { params: { id: character.id.toString() } };
-  });
+    // Validación de la respuesta de la API
+    if (!data || !data.data || !Array.isArray(data.data.results)) {
+      throw new Error("Estructura de respuesta incorrecta o sin datos");
+    }
 
-  return {
-    paths,
-    fallback: true,
-  };
+    const paths = data.data.results.map((character) => ({
+      params: { id: character.id.toString() },
+    }));
+
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (error) {
+    console.error("Error fetching characters:", error);
+    return {
+      paths: [],
+      fallback: true, // fallback para manejar páginas no generadas
+    };
+  }
 };
 
 export default Character;
