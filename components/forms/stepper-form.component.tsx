@@ -48,6 +48,7 @@ const StepperForm: FC<StepperForm> = ({ comic }) => {
       price: 0,
     },
   };
+  
   const router = useRouter();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [checkoutData, setCheckoutData] = useState<ICheckout>(defaultValue);
@@ -57,68 +58,62 @@ const StepperForm: FC<StepperForm> = ({ comic }) => {
     setActiveStep(step);
   };
 
+  // Esto asegura que el useEffect no cause un bucle infinito al actualizar checkoutData
   useEffect(() => {
-    {
-      comic &&
-        setCheckoutData({
-          ...checkoutData,
-          order: {
-            name: comic.title,
-            image: `${comic?.thumbnail.path}.${comic.thumbnail.extension}`,
-            price: comic.price,
-          },
-        });
+    if (comic) {
+      setCheckoutData(prevState => ({
+        ...prevState,
+        order: {
+          name: comic.title,
+          image: `${comic.thumbnail.path}.${comic.thumbnail.extension}`,
+          price: comic.price,
+        },
+      }));
     }
-  }, [checkoutData, comic]);
+  }, [comic]);
 
   const handleSubmitCustomerForm = (data: ICustomer) => {
-    setCheckoutData({
-      ...checkoutData,
+    setCheckoutData(prevState => ({
+      ...prevState,
       customer: { ...data },
-    });
-    setActiveStep(activeStep + 1);
+    }));
+    setActiveStep(prev => prev + 1);
   };
 
   const handleSubmitAddressForm = (data: IAddress) => {
-    setCheckoutData({
-      ...checkoutData,
+    setCheckoutData(prevState => ({
+      ...prevState,
       customer: {
-        ...checkoutData.customer,
+        ...prevState.customer,
         address: { ...data },
       },
-    });
-    setActiveStep(activeStep + 1);
+    }));
+    setActiveStep(prev => prev + 1);
   };
 
   const handleSubmitPaymentForm = (data: ICard) => {
-    setCheckoutData({
-      ...checkoutData,
-      card: {
-        ...data,
-      },
-    });
-    const dataForm = {
+    const updatedCheckoutData = {
       ...checkoutData,
       card: {
         ...data,
       },
     };
-    const response = postCheckout(dataForm);
+    const response = postCheckout(updatedCheckoutData);
 
-    response.then((response) => {
-      if (!response.data) {
-        const error = catchError(response);
+    response.then((res) => {
+      if (!res.data) {
+        const error = catchError(res);
         setError(error);
         return;
       } else {
-        const customer = response.data.customer;
-        const order = response.data.order;
+        const customer = res.data.customer;
+        const order = res.data.order;
 
         localStorage.setItem(
           "checkoutData",
           JSON.stringify({
-            customer: customer,
-            order: order,
+            customer,
+            order,
           })
         );
         router.push({
@@ -129,7 +124,9 @@ const StepperForm: FC<StepperForm> = ({ comic }) => {
   };
 
   const handleBack = () => {
-    activeStep > 0 && setActiveStep(activeStep - 1);
+    if (activeStep > 0) {
+      setActiveStep(prev => prev - 1);
+    }
   };
 
   return (
@@ -149,9 +146,7 @@ const StepperForm: FC<StepperForm> = ({ comic }) => {
       </Stepper>
       <Box>
         <Typography
-          sx={{
-            paddingBottom: "30px",
-          }}
+          sx={{ paddingBottom: "30px" }}
           variant="h5"
         >
           Paso {activeStep + 1}
@@ -182,9 +177,7 @@ const StepperForm: FC<StepperForm> = ({ comic }) => {
       {error !== "" && (
         <Alert
           severity="error"
-          sx={{
-            marginTop: "30px",
-          }}
+          sx={{ marginTop: "30px" }}
         >
           {error}
         </Alert>

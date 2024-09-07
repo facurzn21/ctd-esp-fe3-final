@@ -11,9 +11,9 @@
     "build-storybook": "build-storybook",
     "test": "jest --env=jsdom",
     "test:watch": "jest --env=jsdom --watch",
-    "test:ci": "jest --ci --runInBand --detectOpenHandles --forceExit ",
-    "coverage": "jest --env=jsdom --coverage --runInBand --detectOpenHandles --forceExit "
-  },
+    "test:ci": "jest --ci --runInBand --detectOpenHandles --forceExit",
+    "coverage": "jest --env=jsdom --coverage --runInBand --detectOpenHandles --forceExit"
+},
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
@@ -51,6 +51,7 @@
     "@types/react-credit-cards": "^0.8.4",
     "@types/react-dom": "18.0.6",
     "babel-loader": "^8.2.5",
+    "dotenv": "^16.4.5",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
     "eslint-plugin-storybook": "^0.6.4",
